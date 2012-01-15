@@ -14,12 +14,6 @@ class GemDownloader
         Marshal.load(all_gems_file)
     end
 
-    def dependencies(gem_name)
-        dependency_list = Gems.dependencies(gem_name)
-        dep_list_latest_version = dependency_list[0][:dependencies]
-        dep_list_latest_version.map { |e| e[0] }
-    end
-
     private
     def latest_gems_file
         fetch_gems_file(LATEST_GEMS_URL)

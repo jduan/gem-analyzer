@@ -9,4 +9,4 @@ end
 
 gem_downloader = GemDownloader.new
 gem_analyzer = GemAnalyzer.new(gem_downloader)
-gem_analyzer.analyze_new(1000)
+gem_analyzer.analyze_new(10)

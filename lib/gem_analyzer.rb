@@ -13,6 +13,23 @@ class GemAnalyzer
         @gem_downloader = gem_downloader
     end
 
+    def analyze_new(num_of_gems = nil)
+        gem_names = download_latest_gem_names
+        # analyze all the gems if nil is passed in
+        num_of_gems = gem_names.size if num_of_gems.nil?
+
+        all_gems = {}
+        gem_names[0, num_of_gems].each do |gem_name|
+            OneGemAnalyzer.find_dependencies_of(gem_name, all_gems)
+        end
+        all_gems.values.sort.each do |gem_node|
+            puts "gem #{gem_node.name}, version: #{gem_node.version}, " +
+                "consumers: #{gem_node.consumers.size}"
+        end
+
+        puts "total number of consumed gems: #{all_gems.size}"
+    end
+
     def analyze
         gem_names = download_latest_gem_names
         # gem_name => gem_node

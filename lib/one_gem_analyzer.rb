@@ -3,6 +3,8 @@ NameAndVersion = Struct.new(:name, :version)
 class OneGemAnalyzer
     # return the names of the dependency gems for a given gem
     def self.find_dependencies_of(gem_name, all_gems)
+        puts "Analyzing #{gem_name}..."
+
         dependencies = []
         Gems.dependencies(gem_name).each do |h|
             version = h[:number]

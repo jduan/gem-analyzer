@@ -1,21 +1,23 @@
 # This class represents a gem. Each gem has a list of 
 # dependencies and a list of consumers.
+require "set"
+
 class GemNode
     attr_reader :name, :version, :dependencies, :consumers
 
     def initialize(name, version = 0)
         @name = name
         @version = version
-        @dependencies = []
-        @consumers = []
+        @dependencies = Set.new
+        @consumers = Set.new
     end
 
     def add_dependency(dep)
-        @dependencies << dep unless @dependencies.include? dep
+        @dependencies << dep
     end
 
     def add_consumer(consumer)
-        @consumers << consumer unless @consumers.include? consumer
+        @consumers << consumer
     end
 
     def has_deps_or_consumers?
@@ -30,9 +32,9 @@ class GemNode
         #"GemNode: [name=#{name}, version=#{version}, deps=#{dependencies}, consumers=#{consumers}]"
         format = "GemNode: \n\tname=%s, \n\tversion=%s, \n\tdeps=%s, \n\tconsumers=%s"
         deps = []
-        dependencies.each { |d| deps << d.name }
+        dependencies.each { |d| deps << "#{d.name}{#{d.version}}" }
         cons = []
-        consumers.each { |c| cons << c.name }
+        consumers.each { |c| cons << "#{c.name}{#{c.version}}" }
         format % [name, version, deps, cons]
     end
 

@@ -1,15 +1,37 @@
-This application analyzes all the gems from RubyGems.org to find the most useful gems.
+# Introduction
 
-The task breakdown of this project would be:
+This application analyzes all the gems from RubyGems.org to find the gems
+that are mostly consumed by other gems. 'json' and 'rake' are 2 good 
+examples. They are heavily utilized gems. The purpose of this project
+is to help the community find useful gems so they don't need to reinvent
+the wheels when the start a new project.
 
-* Download http://rubygems.org:80/latest_specs.4.8.gz to get a list of all the gems.
-* Gunzip and unmarshal the data
-* Go over each gem one by one. For each gem, use the 'gems' gem to get the dependency list from the gemspec
-* Build a dependency graph of all the gems, each node being a gem+version. (I'll need to ponder if I should use a node for each specific version or only the major.minor versions)
-* Analyze the graph to find the core gems, ie the gems that are mostly dependent on by other gems
+# Implementation
+
+You can start the analyzer by doing a 'ruby launcher.rb' at the root of the
+project. It will analyze all the gems by following the procedure below:
+
+* Download http://rubygems.org:80/latest\_specs.4.8.gz to get a list of 
+all the latest gems.
+* Gunzip and unmarshal the data.
+* Go over each gem one by one. For each gem, use the 'gems' gem to get 
+the dependency list from the gemspec.
+* For each consumed gem, add the current gem to its consumer list.
+* Sort the consumed gems according to the size of its consumer list to 
+find the core gems, ie the gems that are mostly dependent on by other gems.
+
+# Statistics
+You can find some statistics under the 'statistics/' directory.
+
+# TODO
+
 * Have some UI (either interactive or static) to present the results
-* Deploy this app to some server and schedule a cron job or something so the data can be analyzed on a daily/weekly basis etc.
+* Deploy this app to some server and schedule a cron job or something 
+so the data can be analyzed on a daily/weekly basis etc.
 
-Where am I at?
+# Note
 
-So far, I've ignored gem versions when analyzing gem dependencies. I'll need to find out what's the best way to handle gem dependencies like (>=, ~> etc). The app now can give you a list of top 50 mostly used gems.
+Note that the dependencies are expressed like ["bundler", "~>1.0"], 
+["bundler", ">1.0"]. This project doesn't try to consolidate them into
+one consumed gem. Instead, "~>1.0" and ">1.0" are considered 2 consumed
+gems even though they are both bundler.

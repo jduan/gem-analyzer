@@ -44,19 +44,25 @@ class GemAnalyzer
     def find_dependencies_of(gem_name, all_gems)
 
         dependencies = []
-        Gems.dependencies(gem_name).each do |h|
+        begin
+          Gems.dependencies(gem_name).each do |h|
             version = h[:number]
             consumer = NameAndVersion.new(gem_name, version)
 
             h[:dependencies].each do |dep|
-                dep_name = dep[0]
-                dep_version = dep[1]
-                dep_gem_key = NameAndVersion.new(dep_name, dep_version)
-                dep_gem = all_gems[dep_gem_key] || GemNode.new(dep_name, dep_version)
-                dep_gem.add_consumer(consumer)
+              dep_name = dep[0]
+              dep_version = dep[1]
+              dep_gem_key = NameAndVersion.new(dep_name, dep_version)
+              dep_gem = all_gems[dep_gem_key] || GemNode.new(dep_name, dep_version)
+              dep_gem.add_consumer(consumer)
 
-                all_gems[dep_gem_key] = dep_gem
+              all_gems[dep_gem_key] = dep_gem
             end
+          end
+        rescue => e
+          # RubyGems.org isn't stable all the time. It can become 
+          # unreachable sometimes. We retry if that happens.
+          puts "caught exception: #{e}, retry..."
         end
     end
 end

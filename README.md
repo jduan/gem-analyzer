@@ -28,6 +28,11 @@ You can find some statistics under the 'statistics/' directory.
 * Have some UI (either interactive or static) to present the results
 * Deploy this app to some server and schedule a cron job or something 
 so the data can be analyzed on a daily/weekly basis etc.
+* (optional) Have some trending data/graph.
+* Find most downloaded gems. We probably want to combine "the most
+consumed gems" and "the most downloaded gems" to find the most useful
+gems. There are lots of "dead/useless" gems depending on some gems. Those
+consumed gems don't necesarily reflect their usefulness.
 
 # Note
 

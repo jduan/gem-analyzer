@@ -13,7 +13,8 @@ class GemAnalyzer
         num_of_gems = gem_names.size if num_of_gems.nil?
 
         all_gems = {}
-        gem_names[0, num_of_gems].each do |gem_name|
+        gem_names[0, num_of_gems].each_with_index do |gem_name, index|
+            puts "#{index}: analyzing gem #{gem_name}..."
             find_dependencies_of(gem_name, all_gems)
         end
         all_gems.values.sort.each do |gem_node|
@@ -41,7 +42,6 @@ class GemAnalyzer
 
     # return the names of the dependency gems for a given gem
     def find_dependencies_of(gem_name, all_gems)
-        puts "Analyzing #{gem_name}..."
 
         dependencies = []
         Gems.dependencies(gem_name).each do |h|

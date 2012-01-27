@@ -21,20 +21,18 @@ class GemNode
   end
 
   def has_deps_or_consumers?
-    if @dependencies.size != 0 || @consumers.size != 0
-      true
-    else
-      false
-    end
+    @dependencies.size != 0 || @consumers.size != 0
   end
 
   def to_s
-    #"GemNode: [name=#{name}, version=#{version}, deps=#{dependencies}, consumers=#{consumers}]"
-    format = "GemNode: \n\tname=%s, \n\tversion=%s, \n\tdeps=%s, \n\tconsumers=%s"
-    deps = []
-    dependencies.each { |d| deps << "#{d.name}{#{d.version}}" }
-    cons = []
-    consumers.each { |c| cons << "#{c.name}{#{c.version}}" }
+    format = "GemNode: \n\tname=%s, \n\tversion=%s, \n\tdeps=%s, " +
+      "\n\tconsumers=%s"
+    deps = dependencies.inject([]) do |list|
+      list << "#{d.name}{#{d.version}}"
+    end
+    cons = consumers.inject([]) do |list|
+      list << "#{c.name}{#{c.version}}"
+    end
     format % [name, version, deps, cons]
   end
 

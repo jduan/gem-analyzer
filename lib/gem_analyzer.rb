@@ -7,7 +7,7 @@ class GemAnalyzer
     @gem_downloader = gem_downloader
   end
 
-  def analyze_new(num_of_gems = nil)
+  def analyze(num_of_gems = nil)
     gem_names = download_latest_gem_names
     # analyze all the gems if nil is passed in
     num_of_gems = gem_names.size if num_of_gems.nil?
@@ -30,39 +30,42 @@ class GemAnalyzer
     latest_gems = @gem_downloader.latest_gems
     puts "total number of gems: #{latest_gems.size}"
 
-    gem_names = []
-    latest_gems.each do |gem|
+    latest_gems.inject([]) do |names, gem|
       name = gem[0]
       version = gem[1].version
-      gem_names << name
+      names << name
     end
-
-    gem_names
   end
 
   # return the names of the dependency gems for a given gem
   def find_dependencies_of(gem_name, all_gems)
 
     dependencies = []
-    begin
-      Gems.dependencies(gem_name).each do |h|
-        version = h[:number]
-        consumer = NameAndVersion.new(gem_name, version)
-
-        h[:dependencies].each do |dep|
-          dep_name = dep[0]
-          dep_version = dep[1]
-          dep_gem_key = NameAndVersion.new(dep_name, dep_version)
-          dep_gem = all_gems[dep_gem_key] || GemNode.new(dep_name, dep_version)
-          dep_gem.add_consumer(consumer)
-
-          all_gems[dep_gem_key] = dep_gem
-        end
+    looping = true
+    while looping do
+      begin
+        dependencies = Gems.dependencies(gem_name)
+        looping = false
+      rescue => e
+        # RubyGems.org isn't stable all the time. It can become 
+        # unreachable sometimes. We retry if that happens.
+        puts "caught exception when calling RubyGems.org: #{e}, retry..."
       end
-    rescue => e
-      # RubyGems.org isn't stable all the time. It can become 
-      # unreachable sometimes. We retry if that happens.
-      puts "caught exception: #{e}, retry..."
+    end
+
+    dependencies.each do |h|
+      version = h[:number]
+      consumer = NameAndVersion.new(gem_name, version)
+
+      h[:dependencies].each do |dep|
+        dep_name = dep[0]
+        dep_version = dep[1]
+        dep_gem_key = NameAndVersion.new(dep_name, dep_version)
+        dep_gem = all_gems[dep_gem_key] || GemNode.new(dep_name, dep_version)
+        dep_gem.add_consumer(consumer)
+
+        all_gems[dep_gem_key] = dep_gem
+      end
     end
   end
 end

@@ -15,4 +15,4 @@ STDOUT.sync = true
 
 gem_downloader = GemDownloader.new
 gem_analyzer = GemAnalyzer.new(gem_downloader)
-gem_analyzer.analyze_new(ARGV[0].nil? ? nil : ARGV[0].to_i)
+gem_analyzer.analyze(ARGV[0].nil? ? nil : ARGV[0].to_i)

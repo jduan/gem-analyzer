@@ -11,7 +11,7 @@ gem_downloader = GemDownloader.new
 gems = gem_downloader.latest_gems
 # As of 1/21/12, the number of gems on RubyGems.org is greater than 30k
 if gems.size < 30_000
-    raise "The number of gems is less than expected: #{gems.size}"
+  raise "The number of gems is less than expected: #{gems.size}"
 else
-    puts "The number of gems on RubyGems.org is #{gems.size}"
+  puts "The number of gems on RubyGems.org is #{gems.size}"
 end

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "GemDownloader" do
   before(:each) do
-    @gd = GemDownloader.new
+    @gd = GemAnalyzer::GemDownloader.new
     def @gd.latest_gems_file
       gzipped_gem_file = File.expand_path(File.dirname(__FILE__) + 
                                           "/latest_specs.4.8.gz")

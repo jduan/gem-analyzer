@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require_relative '../lib/gem_analyzer'
+
+# This makes stdout flush after each 'puts' so I can see the 
+# results in the output file right away. Analyzing over 30k
+# gems takes a lot of time and I'd like to see where the progress
+# is along the way.
+STDOUT.sync = true
+
+GemAnalyzer::Application.run(ARGV[0])

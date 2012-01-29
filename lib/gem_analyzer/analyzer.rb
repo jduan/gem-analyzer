@@ -11,10 +11,14 @@ module GemAnalyzer
     def analyze(num_of_gems = nil)
       gem_names = download_latest_gem_names
       # analyze all the gems if nil is passed in
-      num_of_gems = gem_names.size if num_of_gems.nil?
+      if num_of_gems.nil?
+        gem_names_analyzed = gem_names
+      else
+        gem_names_analyzed = gem_names.sample(num_of_gems)
+      end
 
       all_gems = {}
-      gem_names[0, num_of_gems].each_with_index do |gem_name, index|
+      gem_names_analyzed.each_with_index do |gem_name, index|
         puts "#{index}: analyzing gem #{gem_name}..."
         find_dependencies_of(gem_name, all_gems)
       end

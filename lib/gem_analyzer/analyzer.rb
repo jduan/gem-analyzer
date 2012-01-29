@@ -46,11 +46,10 @@ module GemAnalyzer
     def find_dependencies_of(gem_name, all_gems)
 
       dependencies = []
-      looping = true
-      while looping do
+      loop do
         begin
           dependencies = Gems.dependencies(gem_name)
-          looping = false
+          break
         rescue => e
           # RubyGems.org isn't stable all the time. It can become 
           # unreachable sometimes. We retry if that happens.
